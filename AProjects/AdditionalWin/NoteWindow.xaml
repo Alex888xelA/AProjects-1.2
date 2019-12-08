@@ -1,0 +1,56 @@
+﻿<Window x:Class="AProjects.NoteWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AProjects"
+        mc:Ignorable="d"
+        Title="NoteWindow" Height="450" Width="600">
+
+    <Window.Resources>
+        <Style x:Key="ButtonTop" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource ButtonBackground}" />
+            <Setter Property="BorderBrush" Value="{StaticResource ButtonBorder}" />
+        </Style>
+    </Window.Resources>
+
+    <Grid Background="{StaticResource ButtonBackground}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition Height="30" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        
+        <!--Вывод содержания основной надписи - атрибуты-->
+        <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="0">
+            <TextBlock Text="Номер:" Margin="5,0,5,0" FontWeight="Black" />
+            <TextBlock Text="{Binding Path=RowNumber}" />
+            <TextBlock Text="Дата:" Margin="20,0,5,0" FontWeight="Black" />
+            <TextBlock Text="{Binding Path=DateText}" />
+        </StackPanel>
+        
+        <!--Вывод содержания основной надписи - Содержание-->
+        <DockPanel Grid.Column="0" Grid.Row="1">
+            <TextBlock DockPanel.Dock="Left" Text="{Binding Path=RecordTypeText}" Margin="5,5,5,0" FontWeight="Bold" />
+            <TextBox DockPanel.Dock="Top" Text="{Binding Path=MainText}" IsReadOnly="True" Margin="5,5,5,0" />
+        </DockPanel>
+        <!--
+        <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="1">
+            <TextBlock Text="{Binding Path=RecordTypeText}" Margin="5,5,5,0" FontWeight="Bold" />
+            <TextBox Text="{Binding Path=MainText}" Margin="5,5,5,0" />
+        </StackPanel>
+        -->
+        <!--Основное поле заметки-->
+        <TextBox Grid.Column="0" Grid.Row="2" Text="{Binding Path=NoteText}" TextWrapping="WrapWithOverflow" AcceptsReturn="True" AcceptsTab="True" SpellCheck.IsEnabled="True" Language="ru-ru" Background="LightYellow" />
+        <!--Поле кнопок-->
+        <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="3" HorizontalAlignment="Right">
+            <Button Command="{Binding ClearNote, Mode=OneWay}" Style="{StaticResource ButtonTop}" Margin="5,2,10,5" Padding="10,0,10,0">Очистить</Button>
+            <Button Command="{Binding SaveNote, Mode=OneWay}" Style="{StaticResource ButtonTop}" Margin="5,2,10,5" Padding="10,0,10,0">Сохранить</Button>
+            <!--TODO: Форматировать кнопки в окне редактирования заметок -->
+        </StackPanel>
+    </Grid>
+</Window>

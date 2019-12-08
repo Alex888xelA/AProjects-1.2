@@ -1,0 +1,492 @@
+﻿<Window x:Class="AProjects.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AProjects"
+        mc:Ignorable="d"
+        Title="AProject"
+        Height="800"
+        Width="1000"
+        FontWeight="Bold" 
+        Closing="MainWindow_Closing">
+
+    <Window.Resources>
+        <Style TargetType="DataGridRow">
+            <Setter Property="Background" Value="White" />
+            <Style.Triggers>
+                <!-- Триггеры для Act-->
+                <DataTrigger Binding="{Binding Path=VisualStyle}" Value="0">
+                    <Setter Property="Background" Value="Seashell"/>
+                    <Setter Property="Foreground" Value="Black" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=VisualStyle}" Value="1">
+                    <Setter Property="Background" Value="Red"/>
+                    <Setter Property="Foreground" Value="Black" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=VisualStyle}" Value="2">
+                    <Setter Property="Background" Value="Yellow"/>
+                    <Setter Property="Foreground" Value="Black" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=VisualStyle}" Value="3">
+                    <Setter Property="Background" Value="Green"/>
+                    <Setter Property="Foreground" Value="Black" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=VisualStyle}" Value="4">
+                    <Setter Property="Background" Value="Blue"/>
+                    <Setter Property="Foreground" Value="Black" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=VisualStyle}" Value="5">
+                    <Setter Property="Background" Value="Violet"/>
+                    <Setter Property="Foreground" Value="Black" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=VisualStyle}" Value="6">
+                    <Setter Property="Background" Value="LightSteelBlue"/>
+                    <Setter Property="Foreground" Value="LightSlateGray" />
+                </DataTrigger>
+                <!--Триггеры для Job-->
+                <DataTrigger Binding="{Binding Path=VisualStyle}" Value="20">
+                    <Setter Property="Background" Value="Moccasin"/>
+                    <Setter Property="FontFamily" Value="Arial" />
+                    <Setter Property="FontSize" Value="16" />
+                    <Setter Property="FontWeight" Value="Bold" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=VisualStyle}" Value="21">
+                    <Setter Property="Background" Value="Red"/>
+                    <Setter Property="Foreground" Value="Black" />
+                    <Setter Property="FontFamily" Value="Arial" />
+                    <Setter Property="FontSize" Value="16" />
+                    <Setter Property="FontWeight" Value="Bold" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=VisualStyle}" Value="22">
+                    <Setter Property="Background" Value="Yellow"/>
+                    <Setter Property="Foreground" Value="Black" />
+                    <Setter Property="FontFamily" Value="Arial" />
+                    <Setter Property="FontSize" Value="16" />
+                    <Setter Property="FontWeight" Value="Bold" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=VisualStyle}" Value="23">
+                    <Setter Property="Background" Value="Green"/>
+                    <Setter Property="Foreground" Value="Black" />
+                    <Setter Property="FontFamily" Value="Arial" />
+                    <Setter Property="FontSize" Value="16" />
+                    <Setter Property="FontWeight" Value="Bold" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=VisualStyle}" Value="24">
+                    <Setter Property="Background" Value="Blue"/>
+                    <Setter Property="Foreground" Value="Black" />
+                    <Setter Property="FontFamily" Value="Arial" />
+                    <Setter Property="FontSize" Value="16" />
+                    <Setter Property="FontWeight" Value="Bold" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=VisualStyle}" Value="25">
+                    <Setter Property="Background" Value="Violet"/>
+                    <Setter Property="Foreground" Value="Black" />
+                    <Setter Property="FontFamily" Value="Arial" />
+                    <Setter Property="FontSize" Value="16" />
+                    <Setter Property="FontWeight" Value="Bold" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=VisualStyle}" Value="26">
+                    <Setter Property="Background" Value="LightSteelBlue"/>
+                    <Setter Property="Foreground" Value="LightSlateGray" />
+                    <Setter Property="FontFamily" Value="Arial" />
+                    <Setter Property="FontSize" Value="16" />
+                    <Setter Property="FontWeight" Value="Bold" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=VisualStyle}" Value="40">
+                    <Setter Property="Background" Value="DarkSlateGray"/>
+                    <Setter Property="Foreground" Value="White" />
+                    <Setter Property="FontFamily" Value="Arial" />
+                    <Setter Property="FontSize" Value="18" />
+                    <Setter Property="FontWeight" Value="Bold" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=VisualStyle}" Value="41">
+                    <Setter Property="Background" Value="LightSteelBlue" />
+                    <Setter Property="Foreground" Value="White" />
+                    <Setter Property="FontFamily" Value="Arial" />
+                    <Setter Property="FontSize" Value="18" />
+                    <Setter Property="FontWeight" Value="Bold" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <!--Кнопки в таблице DataGrid-->
+        <Style TargetType="Button" x:Key="CollapseIcon">
+            <Setter Property="Template" Value="{StaticResource TransparentPic}" />
+            <Setter Property="CommandParameter" Value="Hide" />
+            <Setter Property="BorderBrush" Value="{StaticResource ButtonBorder}" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=ExpandIcon}" Value="true" >
+                    <Setter Property="Template" Value="{StaticResource ExpandPic}" />
+                    <Setter Property="CommandParameter" Value="Unhide" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <!--Кнопка в колонке DataGrid Прим. (Note)-->
+        <Style TargetType="Button" x:Key="NoteButton">
+            <Setter Property="Template" Value="{StaticResource Paperclip}" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=Note}" Value="">
+                    <Setter Property="Template" Value="{StaticResource TransparentPic}" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        
+        <!--Кнопка в колонке Сигнал-->
+        <Style TargetType="Button" x:Key="SignalButton">
+            <Setter Property="Template" Value="{StaticResource BellPic}" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=AlarmTime}" Value="">
+                    <Setter Property="Template" Value="{StaticResource TransparentPic}" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        
+        <!--Кнопка "Завершенные"-->
+        <Style x:Key="FinishedView" TargetType="Button">
+            <Setter Property="Control.Background" Value="{StaticResource ButtoFinishedBackground}" />
+            <Setter Property="BorderBrush" Value="{StaticResource ButtonBorder}" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=ViewWithFinished}" Value="True">
+                    <Setter Property="Control.Background" Value="{StaticResource ButtonBackground}" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="FinishedPicStyle" TargetType="ContentControl">
+            <Setter Property="Template" Value="{StaticResource FinishedHidePic}" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=ViewWithFinished}" Value="True">
+                    <Setter Property="Template" Value="{StaticResource FinishedShowPic}" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <!--Кнопка Архив показать-->
+        <Style x:Key="ArchiveView" TargetType="Button">
+            <Setter Property="Control.Background" Value="{StaticResource ButtonArhBackground}" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="BorderBrush" Value="{StaticResource ButtonBorder}" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=ArchiveView}" Value="False">
+                    <Setter Property="Control.Background" Value="{StaticResource ButtonBackground}" />
+                    <Setter Property="Foreground" >
+                        <Setter.Value>
+                            <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.ControlTextColorKey}}"/>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="ArhPicStyle" TargetType="ContentControl">
+            <Setter Property="Template" Value="{StaticResource ArhViewLightPic}" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=ArchiveView}" Value="False">
+                    <Setter Property="Template" Value="{StaticResource ArhViewDarkPic}" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="ButtonTop" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource ButtonBackground}" />
+            <Setter Property="BorderBrush" Value="{StaticResource ButtonBorder}" />
+        </Style>
+        
+        <!--DataPicker-->
+        <Style x:Key="DataPickerTop" TargetType="DatePicker">
+            <Setter Property="SelectedDate" Value="{Binding Path=CurrentDate}" />
+            <Setter Property="TextBlock.Focusable" Value="False" />
+            <Setter Property="Margin" Value="0,0,5,0" />
+            <Setter Property="BorderBrush" Value="{StaticResource ButtonBorder}" />
+        </Style>
+    </Window.Resources>
+
+    <Grid Name="baseGrid" ShowGridLines="False" Margin="0,0,0,0" Background="{StaticResource ButtonBackground}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="24"></RowDefinition>
+            <RowDefinition  Height="30"></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="25"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="80" />
+            <ColumnDefinition Width="443*" />
+            <ColumnDefinition Width="300*"/>
+            <ColumnDefinition Width="135*"/>
+            <ColumnDefinition Width="40" />
+        </Grid.ColumnDefinitions>
+
+        <Menu Name="Menu" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Height="25" VerticalAlignment="Top">
+            <MenuItem Header="Файл">
+                <MenuItem Header="Новый..." Command="{Binding NewFile, Mode=OneWay}" />
+                <MenuItem Header="Открыть..." Command="{Binding OpenFile, Mode=OneWay}" />
+                <Separator />
+                <MenuItem Header="Закрыть" Command="{Binding CloseFile, Mode=OneWay}" />
+                <Separator />
+                <MenuItem Header="Сохранить" Command="{Binding SaveFile, Mode=OneWay}" />
+                <MenuItem Header="Сохранить как..." Command="{Binding SaveAsFile, Mode=OneWay}" />
+                <Separator />
+                <MenuItem Header="Экспорт">
+                    <MenuItem Header="HTML..." />
+                    <MenuItem Header="PDF..." />
+                </MenuItem>
+                <Separator />
+                <MenuItem Header="Настройка печати..." />
+                <MenuItem Header="Печать" />
+                <Separator />
+                <MenuItem Header="Выход" Command="{Binding AppExit, Mode=OneWay}" />
+            </MenuItem>
+
+            <MenuItem Header="Правка">
+                <MenuItem Header="Отменить" x:Name="menuEditUndo" Command="{Binding Undo, Mode=OneWay}" />
+                <MenuItem Header="Повторить" Command="{Binding Redo, Mode=OneWay}" />
+                <Separator />
+                <MenuItem Header="Вырезать строки" Command="{Binding Path=Cut, Mode=OneWay}" />
+                <MenuItem Header="Вставить строки" Command="{Binding Path=Paste, Mode=OneWay}" />
+                <Separator />
+                <MenuItem Header="Настройки..." />
+            </MenuItem>
+
+            <MenuItem Header="Вид">
+                <MenuItem Header="Завершенные...">
+                    <MenuItem Header="Показать" Command="{Binding FinishedShow, Mode=OneWay}" />
+                    <MenuItem Header="Скрыть" Command="{Binding FinishedHide, Mode=OneWay}" />
+                </MenuItem>
+                <MenuItem Header="Архивные проекты...">
+                    <MenuItem Header="Активные проекты" Command="{Binding ArhHide, Mode=OneWay}" />
+                    <MenuItem Header="Архивные проекты" Command="{Binding ArhShow, Mode=OneWay}" />
+                </MenuItem>
+                <Separator />
+                <MenuItem Header="Свернуть записи" Command="{Binding HideRecords, Mode=OneWay}" />
+                <MenuItem Header="Развернуть записи" Command="{Binding UnHideRecords, Mode=OneWay}" />
+                <MenuItem Header="Свернуть проекты" Command="{Binding HideProjects, Mode=OneWay}" />
+                <MenuItem Header="Свернуть работы" Command="{Binding HideJobs, Mode=OneWay}" />
+            </MenuItem>
+
+            <MenuItem Header="Записи">
+                <MenuItem Header="Создать проект" Command="{Binding ProjCreate, Mode=OneWay}" />
+                <MenuItem Header="Создать работу" Command="{Binding JobCreate, Mode=OneWay}" />
+                <MenuItem Header="Создать дело" Command="{Binding ActCreate, Mode=OneWay}" />
+                <Separator />
+                <MenuItem Header="Завершить проект/работу/дело" Command="{Binding Finalize, Mode=OneWay}" />
+                <MenuItem Header="Удалить запись" Command="{Binding DeleteRow, Mode=OneWay}" />
+                <MenuItem Header="Сделать запись активной" Command="{Binding UnFinalize, Mode=OneWay}" />
+                <Separator />
+                <MenuItem Header="Архивировать проект" Command="{Binding Proj2Arh, Mode=OneWay}" />
+                <MenuItem Header="Восстановить из архива" Command="{Binding ProjFromArh, Mode=OneWay}" />
+            </MenuItem>
+
+            <MenuItem Header="Инструменты">
+                <MenuItem Header="Цвет...">
+                    <MenuItem Header="Нормальный" Command="{Binding SetColor0, Mode=OneWay}" />
+                    <MenuItem Header="Красный" Command="{Binding SetColor1, Mode=OneWay}" />
+                    <MenuItem Header="Желтый" Command="{Binding SetColor2, Mode=OneWay}" />
+                    <MenuItem Header="Зеленый" Command="{Binding SetColor3, Mode=OneWay}" />
+                    <MenuItem Header="Синий" Command="{Binding SetColor4, Mode=OneWay}" />
+                    <MenuItem Header="Фиолетовый" Command="{Binding SetColor5, Mode=OneWay}" />
+                </MenuItem>
+                <Separator />
+                <MenuItem Header="Добавить сигнал" Command="{Binding SignalEdit, Mode=OneWay}" />
+                <MenuItem Header="Добавить примечание" Command="{Binding NoteLook, Mode=OneWay}" />
+                <Separator />
+                <MenuItem Header="Переместить запись вверх" Command="{Binding MoveRecordUp, Mode=OneWay}" />
+                <MenuItem Header="Переместить запись вниз" Command="{Binding MoveRecordDown, Mode=OneWay}" />
+
+            </MenuItem>
+            <MenuItem Header="Помощь"></MenuItem>
+        </Menu>
+
+        <DatePicker Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="0" Style="{StaticResource DataPickerTop}" />
+
+        <!--Левая панель кнопок-->
+        <ToolBarTray Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Left" Background="{StaticResource ButtonBackground}">
+            <ToolBar Name="leftButtons" VerticalAlignment="Top" Background="{StaticResource ButtonBackground}">
+                <TextBlock Text=" Добавить:" FontWeight="Heavy" Height="30" HorizontalAlignment="Left" Margin="0,0,0,0" Background="{StaticResource ButtonBackground}" VerticalAlignment="Bottom" />
+                <Button x:Name="buttonProjCreate" Width="70" Height="60" Style="{StaticResource ButtonTop}" Margin="2,2" Command="{Binding ProjCreate, Mode=OneWay}" ToolTip="Добавить новый проект">
+                    <StackPanel Orientation="Vertical">
+                        <ContentControl Template="{StaticResource ProjPic}" />
+                        <TextBlock HorizontalAlignment="Center" Margin="0,10,0,0">Проект</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button x:Name="buttonJobCreate" Width="70" Height="60" Style="{StaticResource ButtonTop}" Margin="2,2" Command="{Binding JobCreate, Mode=OneWay}" ToolTip="Добавить новую работу">
+                    <StackPanel Orientation="Vertical">
+                        <ContentControl Template="{StaticResource JobPic}" />
+                        <TextBlock HorizontalAlignment="Center" Margin="0,10,0,0">Работу</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button x:Name="buttonActCreate" Width="70" Height="60" Style="{StaticResource ButtonTop}" Margin="2,2" Command="{Binding ActCreate, Mode=OneWay}" ToolTip="Добавить дело">
+                    <StackPanel Orientation="Vertical">
+                        <ContentControl Template="{StaticResource ActPic}" />
+                        <TextBlock HorizontalAlignment="Center" Margin="0,10,0,0">Дело</TextBlock>
+                    </StackPanel>
+                </Button>
+            </ToolBar>
+
+            <ToolBar Name="leftButtons2" VerticalAlignment="Top" Background="{StaticResource ButtonBackground}">
+                <Button x:Name="buttonFinish" Width="70" Height="60" Style="{StaticResource ButtonTop}" Margin="2,2" Command="{Binding Finalize, Mode=OneWay}" ToolTip="Завершить проект/работу/дело">
+                    <StackPanel Orientation="Vertical">
+                        <ContentControl Template="{StaticResource FinishPic}" />
+                        <TextBlock HorizontalAlignment="Center" Margin="0,10,0,0">Завершить</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button x:Name="buttonSave" Width="70" Height="60" Style="{StaticResource ButtonTop}" Margin="2,2" Command="{Binding Proj2Arh, Mode=OneWay}" ToolTip="Переместить проект в архив">
+                    <StackPanel Orientation="Vertical">
+                        <ContentControl Template="{StaticResource ToArhPic}" />
+                        <TextBlock HorizontalAlignment="Center" Margin="0,10,0,0">В архив</TextBlock>
+                    </StackPanel>
+                </Button>
+            </ToolBar>
+        </ToolBarTray>
+
+        <!--Правая панель кнопок-->
+        <ToolBarTray Grid.Column="4" Grid.Row="2" Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,0,5,0">
+            <ToolBar Name="rightButtons" VerticalAlignment="Top" HorizontalAlignment="Center">
+                <Button x:Name="buttonColor1" Width="30" Height="30" Background="White" Margin="2" Command="{Binding SetColor0, Mode=OneWay}" ToolTip="Изменить цвет фона записи" />
+                <Button x:Name="buttonColor2" Width="30" Height="30" Background="Red" Margin="2" Command="{Binding SetColor1, Mode=OneWay}" ToolTip="Изменить цвет фона записи" />
+                <Button x:Name="buttonColor3" Width="30" Height="30" Background="Yellow" Margin="2" Command="{Binding SetColor2, Mode=OneWay}" ToolTip="Изменить цвет фона записи" />
+                <Button x:Name="buttonColor4" Width="30" Height="30" Background="Green" Margin="2" Command="{Binding SetColor3, Mode=OneWay}" ToolTip="Изменить цвет фона записи" />
+                <Button x:Name="buttonColor5" Width="30" Height="30" Background="Blue" Margin="2" Command="{Binding SetColor4, Mode=OneWay}" ToolTip="Изменить цвет фона записи" />
+                <Button x:Name="buttonColor6" Width="30" Height="30" Background="Violet" Margin="2" Command="{Binding SetColor5, Mode=OneWay}" ToolTip="Изменить цвет фона записи" />
+            </ToolBar>
+        </ToolBarTray>
+
+        <!--Верхняя панелоь кнопок-->
+        <Grid Name="TopToolBar" Grid.Column="0" Grid.ColumnSpan="5" Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="24" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="280" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal">
+            <Button Width="120" HorizontalAlignment="Left" Margin="5,0,5,0" Style="{StaticResource ButtonTop}" Command="{Binding SaveFile, Mode=OneWay}" ToolTip="Сохранить файл">
+                <StackPanel Orientation="Horizontal">
+                    <ContentControl Template="{StaticResource SavePic}" />
+                    <TextBlock Text="Сохранить" Margin="5,0,5,0" />
+                </StackPanel>
+            </Button>
+                <Button Width="120" HorizontalAlignment="Left" Margin="5,0,5,0" Style="{StaticResource ButtonTop}" Command="{Binding Undo, Mode=OneWay}" ToolTip="Отменить действие">
+                <StackPanel Orientation="Horizontal">
+                        <ContentControl Template="{StaticResource UndoPic}" />
+                        <TextBlock Text="Отменить" Margin="5,0,5,0" />
+                </StackPanel>
+            </Button>
+            </StackPanel>
+
+            <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal">
+                <!-- Переместить запись вверх-->
+                <Button Width="30" Margin="5,0,5,0" Style="{StaticResource ButtonTop}" Command="{Binding MoveRecordUp, Mode=OneWay}" ToolTip="Переместить дело или работу вверх по списку">
+                    <ContentControl Template="{StaticResource UpPic}" />
+                </Button>
+
+                <!-- Переместить запись вниз-->
+                <Button Width="30" Margin="5,0,5,0" Style="{StaticResource ButtonTop}" Command="{Binding MoveRecordDown, Mode=OneWay}" ToolTip="Переместить дело или работу вниз по списку">
+                    <ContentControl Template="{StaticResource DownPic}" />
+                </Button>
+            </StackPanel>
+
+
+            <StackPanel Grid.Column="2" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Name="CollapseJob" Margin="5,0,5,0" Width="90" Style="{StaticResource ButtonTop}" Command="{Binding HideJobs, Mode=OneWay}" ToolTip="Свернуть все дела">
+                    <StackPanel Orientation="Horizontal">
+                        <ContentControl Template="{StaticResource CollapseJobsPic}" />
+                        <TextBlock Text="Работы" Margin="5,0,5,0" />
+                    </StackPanel>
+                </Button>
+                <Button Name="CollapseProj" Margin="5,0,5,0" Width="90" Style="{StaticResource ButtonTop}" Command="{Binding HideProjects, Mode=OneWay}" ToolTip="Свернуть все дела и работы">
+                    <StackPanel Orientation="Horizontal">
+                        <ContentControl Template="{StaticResource CollapseProjPic}" />
+                        <TextBlock Text="Проекты" Margin="5,0,5,0" />
+                    </StackPanel>
+                </Button>
+
+                <Button Name="FinishedViewButton" Margin="5,0,5,0" Width="90" Command="{Binding FinishedChangeMode, Mode=OneWay}" Style="{StaticResource FinishedView}" ToolTip="Скрыть/Показать завершенные дела и работы">
+                    <StackPanel Orientation="Horizontal">
+                        <ContentControl Style="{StaticResource FinishedPicStyle}" />
+                        <TextBlock Text="Завекш." Margin="5,0,5,0" />
+                    </StackPanel>
+                </Button>
+
+                <!--Кнопка переключения вида Архив-->
+                <Button Margin="15,0,5,0" Width="90" Command="{Binding ArhChangeMode, Mode=OneWay}" Style="{StaticResource ArchiveView}" ToolTip="Переключение вида между архивом и активным проектами">
+                    <StackPanel Orientation="Horizontal">
+                        <ContentControl Style="{StaticResource ArhPicStyle}"/>
+                        <TextBlock Text="Архив" Margin="10,0,0,0" />
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <StatusBar Name="statusBar" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="5" Background="LightGray">
+            <StatusBar.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                </ItemsPanelTemplate>
+            </StatusBar.ItemsPanel>
+            <StatusBarItem Grid.Column="0">
+                <TextBlock Text="{Binding Path=LoadedFile, Mode=TwoWay}" />
+            </StatusBarItem>
+            <!--<Separator Grid.Column="1" /> -->
+            <StatusBarItem Grid.Column="1" HorizontalAlignment="Right">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Пр.:" Margin="0,0,10,0" />
+                    <TextBlock Text="{Binding Path=ProjectCount}" />
+                    <TextBlock Text="Зап.:" Margin="20,0,10,0" />
+                    <TextBlock Text="{Binding Path=RecordCount}" Margin="0,0,5,0" />
+                </StackPanel>
+            </StatusBarItem>
+        </StatusBar>
+
+        <DataGrid x:Name="mainDataGrid" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="3" Background="{StaticResource DataGridBackground}" AutoGenerateColumns="False" ColumnWidth="*" SelectionUnit="Cell" CanUserResizeRows="False" CanUserAddRows="False" CellEditEnding="MainDataGrid_CellEditEnding" SelectedItem="{Binding SelectedViewRecord}" SelectedCellsChanged="DataGrid_SelectedCellsChanged" RowDetailsVisibilityMode="VisibleWhenSelected">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="+" Width="20" CanUserResize="False" CanUserReorder="False" IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Command="{Binding Path=DataContext.ChangedHideMode, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Style="{StaticResource CollapseIcon}" ToolTip="Свернуть или показать записи" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTextColumn x:Name="dgNumber" Header= "Номер"  Binding="{Binding Path=Number, Mode=OneWay}" Width="50" />
+                <DataGridTextColumn x:Name="dgDate" Header= "Дата"  Binding="{Binding Path=RecordDate, Mode=TwoWay}" Width="100" />
+                <DataGridTextColumn x:Name="dgContent" Header= "Содержание" Binding="{Binding Path=Content, Mode=TwoWay}" />
+                
+                <!--<DataGridTextColumn x:Name="dgSignal" Header= "Сигнал" Binding="{Binding Path=AlarmTime, Mode=OneWay}" Width="50" /> -->
+                <DataGridTemplateColumn Header="{StaticResource BellHeaderPic}" Width="20" CanUserResize="False" CanUserReorder="False" IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Command="{Binding Path=DataContext.SignalEdit, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Style="{StaticResource SignalButton}" ToolTip="Настроить сигнал" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="{StaticResource PaperclipHeader}" Width="20" CanUserResize="False" CanUserReorder="False" IsReadOnly="True">
+<!-- Заголовок колонки примечаний-->
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Command="{Binding Path=DataContext.NoteLook, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" Style="{StaticResource NoteButton}" ToolTip="Добавить примечания" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+
+            <DataGrid.ColumnHeaderStyle>
+                <Style TargetType="{x:Type DataGridColumnHeader}">
+                    <Setter Property="Height" Value="25" />
+                    <Setter Property="Padding" Value="5" />
+                    <Setter Property="Background" Value="#FF92ADD3" />
+                    <Setter Property="Foreground" Value="White" />
+                </Style>
+            </DataGrid.ColumnHeaderStyle>
+        </DataGrid>
+    </Grid>
+</Window>

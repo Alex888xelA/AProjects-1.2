@@ -1,0 +1,12 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:AProjects">
+
+    
+    <SolidColorBrush x:Key="ButtonBackground" Color="#FFEFEFEF" />
+    <SolidColorBrush x:Key="ButtonBorder" Color="#FFFFFFFF" />
+    <SolidColorBrush x:Key="ButtoFinishedBackground" Color="#FFE0E0E0" />
+    <SolidColorBrush x:Key="ButtonArhBackground" Color="MidnightBlue" />
+    <SolidColorBrush x:Key="DataGridBackground" Color="#FFF9F9F9" />
+
+</ResourceDictionary>
