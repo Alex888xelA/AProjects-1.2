@@ -82,7 +82,7 @@ namespace AProjects
 
         private void TimerRun(DateTime dateTime)
         {
-            if (null != dateTime)
+            if (null != dateTime && DateTime.Now < dateTime)
             {
                 TimeSpan timeSpan = new TimeSpan();
                 timeSpan = dateTime - DateTime.Now;

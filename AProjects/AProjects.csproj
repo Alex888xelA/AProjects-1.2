@@ -95,10 +95,13 @@
     <Compile Include="AdditionalWin\NoteWindow.xaml.cs">
       <DependentUpon>NoteWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="EventArgs\ExportHTMLWindowEventArgs.cs" />
     <Compile Include="EventArgs\NoteWindowClosedEventArgs.cs" />
     <Compile Include="ExportHTML.xaml.cs">
       <DependentUpon>ExportHTML.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ExportHTMLProcessing.cs" />
+    <Compile Include="Models\ExportHTMLViewModel.cs" />
     <Compile Include="SignalProcessing.cs" />
     <Compile Include="AdditionalWin\SignalWindow.xaml.cs">
       <DependentUpon>SignalWindow.xaml</DependentUpon>

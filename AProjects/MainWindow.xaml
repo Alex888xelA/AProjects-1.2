@@ -228,7 +228,7 @@
                 <MenuItem Header="Сохранить как..." Command="{Binding SaveAsFile, Mode=OneWay}" />
                 <Separator />
                 <MenuItem Header="Экспорт">
-                    <MenuItem Header="HTML..." />
+                    <MenuItem Header="HTML..." Command="{Binding ExportHTML, Mode=OneWay}" />
                     <MenuItem Header="PDF..." />
                 </MenuItem>
                 <Separator />

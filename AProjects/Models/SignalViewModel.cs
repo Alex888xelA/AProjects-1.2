@@ -49,11 +49,11 @@ namespace AProjects
         }
 
 
-        private void hourList_PropertyChanged(Object sender, PropertyChangedEventArgs e)
-        {
-            //System.Windows.MessageBox.Show("\n Name = " + e.PropertyName); //sender.GetType().GetProperties()[0].GetValue()
+        //private void hourList_PropertyChanged(Object sender, PropertyChangedEventArgs e)
+        //{
+        //    //System.Windows.MessageBox.Show("\n Name = " + e.PropertyName); //sender.GetType().GetProperties()[0].GetValue()
 
-        }
+        //}
 
         #endregion
 

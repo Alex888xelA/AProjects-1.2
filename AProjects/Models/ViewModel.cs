@@ -28,7 +28,7 @@ namespace AProjects
         public SpecialObservableCollection<ViewRecord> viewRecords;
         private List<Record> viewModelRecords; //Для получения данных из модели
         public List<ViewRecord> SelectedViewRecords; //Список выделенных строк
-        public List<String> SelectedRowNumbers;
+        //public List<String> SelectedRowNumbers;
         private ViewRecord selectedRow; //Хранит строку для последующей установки выделения на ней
         private Boolean archiveView; //False - активные записи, True - архивные записи
         private Boolean viewWithFinished; //False - завершенные не показывать, True - завершенные показывать
@@ -40,12 +40,14 @@ namespace AProjects
         private Dictionary<String, SignalWindow> signalWindows; //Список открытых окон редактирования сигналов (SignalWindow): <Номер строки, указатель на окно>
         private List<Alarm> alarms; //Список будильников
         private SignalProcessing signalProcessing; //Класс работы с таймерами для будильников
+        private ExportHTML exportHTML; //Окно настроек экспорта в HTML
+        private ExportHTMLViewModel exportHTMLViewModel; //viewModel для окна настроек экспорта в HTML
 
         public ViewModel()
         {
             model = new Model();
             viewModelRecords = new List<Record>();
-            SelectedRowNumbers = new List<string>();
+            //SelectedRowNumbers = new List<string>();
             SelectedViewRecords = new List<ViewRecord>();
             currentFile = Properties.Settings.Default.LastFileName;
             viewRecords = new SpecialObservableCollection<ViewRecord>();
@@ -75,18 +77,6 @@ namespace AProjects
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
-
-        //private static void viewRecords_CollectionChanged(Object sender, NotifyCollectionChangedEventArgs e)
-        //{
-        //    //System.Windows.MessageBox.Show("CollectionChange = " + e.ToString());
-        //    //System.Windows.MessageBox.Show(PropertyChangedEventArgs.PropertyName.ToString());
-        //}
-
-        //private void viewRecords_PropertyChanged(Object sender, PropertyChangedEventArgs e)
-        //{
-        //    //System.Windows.MessageBox.Show("\n Name = " + e.PropertyName); //sender.GetType().GetProperties()[0].GetValue()
-
-        //}
 
         private void NoteWindowClosedEventHandler(object sender, NoteWindowClosedEventArgs eventArgs)
         {
@@ -131,8 +121,7 @@ namespace AProjects
 
         private void signalProcessing_AlarmTimerTick(object sender, AlarmTimerTickEventArgs eventArgs)
         {
-            //MessageBox.Show("ViewModel - сработал таймер" + eventArgs);
-
+            //Сработал таймер
             String signalRowNumber = eventArgs.Message;
             if (signalWindows.ContainsKey(signalRowNumber)) //Окно для этой строки уже открыто
             {
@@ -153,6 +142,69 @@ namespace AProjects
             }
             alarms = model.GetSignals();
             signalProcessing.UpdateTimers(alarms);
+        }
+
+        private void ExportHTMLWindowClosedEventHandler(object sender, ExportHTMLWindowEventArgs eventArgs)
+        {
+            exportHTML.Close();
+            exportHTMLViewModel.RaiseExportHTMLWindowClosedEvent -= ExportHTMLWindowClosedEventHandler;
+            exportHTMLViewModel = null;
+            Dictionary<String, Boolean> exportSettings = (Dictionary < String, Boolean > )eventArgs.Message;
+            if (exportSettings.Count == 0) //Если уставки отсутствуют, то пользователь нажал кнопку "Отмена"
+                return;
+            FileDialog dialog = new SaveFileDialog();
+            dialog.FileName = "AProjects"; //Имя файла по умолчанию
+            dialog.DefaultExt = ".html"; //Расширение по умолчанию
+            dialog.Filter = "Веб-страница |*.html|Все файлы|*.*";
+            if (dialog.ShowDialog() == true)
+            {
+                String fileName = dialog.FileName;
+                ExportHTMLProcessing exportHTMLProcessing = new ExportHTMLProcessing(exportSettings, model, fileName);
+
+                if (exportSettings["ExportSelectedRecords"] == true) //Экспорт выделенных записей
+                {
+                    //Выбираем выделенные записи
+                    if (SelectedViewRecords.Count > 0)
+                    {
+                        List<String> vrNumbers = new List<string>();
+                        foreach (ViewRecord vr in SelectedViewRecords)
+                        {
+                            vrNumbers.Add(vr.Number);
+                        }
+                        try //Перехват прерывание ошибки записи в файл
+                        {
+                            exportHTMLProcessing.SelectionExport(vrNumbers);
+                        }
+                        catch
+                        {
+                            MessageBox.Show("Ошибка записи файла HTML!");
+                        }
+                        finally
+                        {
+                            exportHTMLProcessing = null;
+                            exportSettings = null;
+                        }
+                    }
+                    else
+                        Debug.Assert(true, "ExportHTMLWindowClosedEventHandler - SelectedViewRecords.Count = 0");
+                }
+                else //Экспорт во всех случаях, кроме экспорта выделенных строк
+                {
+                    try //Перехват прерывание ошибки записи в файл
+                    {
+                        exportHTMLProcessing.Export();
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Ошибка записи файла HTML!");
+                    }
+                    finally
+                    {
+                        exportHTMLProcessing = null;
+                        exportSettings = null;
+                    }
+                }
+            }
 
         }
         #endregion
@@ -672,6 +724,10 @@ namespace AProjects
         private ICommand _saveAsFile;
         public ICommand SaveAsFile => _saveAsFile ?? (_saveAsFile = new RelayCommand(SaveAsFileCommand));
 
+        //Файл.Экспорт HTML
+        private ICommand _exportHTML;
+        public ICommand ExportHTML => _exportHTML ?? (_exportHTML = new RelayCommand(ExportHTMLCommand, IsCanExport));
+
         //Файл.Выход
         private ICommand _exit;
         public ICommand AppExit => _exit ?? (_exit = new RelayCommand(ExitCommand));
@@ -922,6 +978,26 @@ namespace AProjects
             ViewUpdate();
         }
 
+        //Файл.Экспорт HTML
+        private void ExportHTMLCommand(object parameter)
+        {
+            exportHTMLViewModel = new ExportHTMLViewModel();
+            exportHTMLViewModel.RaiseExportHTMLWindowClosedEvent += ExportHTMLWindowClosedEventHandler;
+            exportHTML = new ExportHTML();
+            exportHTML.DataContext = exportHTMLViewModel;
+            exportHTML.Show();
+        }
+
+        private Boolean IsCanExport(object parameter)
+        {
+            Boolean res;
+            if (null == exportHTMLViewModel)
+                res = true;
+            else
+                res = false;
+            return res;
+        }
+
         //Файл.Выход
         private void ExitCommand(object parametr)
         {
@@ -1139,7 +1215,6 @@ namespace AProjects
         private void ProjCreateCommand(object parameter)
         {
             model.CreateProject();
-            //viewRecords = model.GetData();
             ViewUpdate();
             ProjectCountUpdate();
             Int32 rowIndex = viewRecords.IndexOf(model.LastRowAdded);

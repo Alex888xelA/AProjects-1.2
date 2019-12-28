@@ -20,7 +20,6 @@ namespace AProjects
         private Stack<UndoAction> undoActions;
         private Stack<UndoAction> redoActions;
         private ViewRecord lastRowAdded = null; //Последняя добавленная в модель запись (для использования в ViewModel)
-        //private FileOp fileOp; //Клас файловых операций (открытие, сохранение)
         private const String ApplicationVersion = "AProject"; //Тип приложения, для проверки совместимости формата файла данных
         private const String FileFormatVersion = "v1"; //Версия формата файла данных
         private Queue<Record> clipboard; //Стэк для хранения скопированных или вырезаных записей
@@ -647,7 +646,7 @@ namespace AProjects
 
         /// <summary>
         /// Возвращает единственную запись по ее номеру
-        /// Используется в NoteViewModel
+        /// Используется в NoteViewModel, ExportHTMLProcessing
         /// </summary>
         /// <param name="selectedRowNumber">Значение номера записи</param>
         /// <returns></returns>
