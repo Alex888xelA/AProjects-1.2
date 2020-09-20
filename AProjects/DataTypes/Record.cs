@@ -281,6 +281,7 @@ namespace AProjects
     public enum AlarmRepit { no, day, week, month, year }
     public enum RecordType { project, job, act }
     public enum RecordStatus { active, finished, arx }
+    public enum ExportMode { Html, Csv }
 
     public class ViewRecord : INotifyPropertyChanged, IComparable<ViewRecord>, IEquatable<ViewRecord>
     {

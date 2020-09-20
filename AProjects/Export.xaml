@@ -1,11 +1,11 @@
-﻿<Window x:Class="AProjects.ExportHTML"
+﻿<Window x:Class="AProjects.Export"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AProjects"
         mc:Ignorable="d"
-        Title="Экспорт в HTML" Height="320" Width="400">
+        Title="Экспорт" Height="320" Width="400">
 
     <Window.Resources>
         <Style x:Key="ButtonTop" TargetType="Button">
@@ -24,7 +24,7 @@
         </Grid.ColumnDefinitions>
 
         <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="0" Margin="12,12,0,0">
-            <TextBlock Text="Настройка экспорта в HTML-файл" FontSize="18" Margin="0,0,0,12" />
+            <TextBlock Text="Настройки экспорта" FontSize="18" Margin="0,0,0,12" />
             <CheckBox IsThreeState="False" IsChecked="{Binding ExportSelectedRecords}" Margin="0,0,0,6" Content="Экспортировать выделенные записи" />
             <CheckBox IsThreeState="False" IsChecked="{Binding ExportActiveRecords}" IsEnabled="{Binding NotExportSelectedRecords}" Margin="0,0,0,6" Content="Экспортировать активные Проекты/Работы/Дела" />
             <CheckBox IsThreeState="False" IsChecked="{Binding ExportCollapsedRecords}" IsEnabled="{Binding NotExportSelectedRecords}" Margin="0,0,0,6" Content="Экспортировать свернутые записи" />

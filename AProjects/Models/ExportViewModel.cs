@@ -11,7 +11,7 @@ using System.Windows.Input;
 
 namespace AProjects
 {
-    class ExportHTMLViewModel : INotifyPropertyChanged
+    class ExportViewModel : INotifyPropertyChanged
     {
         private Boolean exportSelectedRecords;
         private Boolean exportActiveRecords;
@@ -23,15 +23,8 @@ namespace AProjects
         private Boolean exportAlarms;
         private Boolean notExportSelectedRecords;
 
-        //private Model model;
-        //private SpecialObservableCollection<ViewRecord> viewRecords;
-        //private List<ViewRecord> selectedViewRecords;
-
-        public ExportHTMLViewModel()
+        public ExportViewModel()
         {
-            //this.model = model;
-            //this.viewRecords = viewRecords;
-            //this.selectedViewRecords = selectedViewRecords;
             ExportSelectedRecords = false;
             ExportActiveRecords = true;
             ExportCollapsedRecords = true;
@@ -52,10 +45,10 @@ namespace AProjects
 
         //Событие закрытия окна Экспорта в HTML
         //Используется для закрытия окна из ViewModel
-        public event EventHandler<ExportHTMLWindowEventArgs> RaiseExportHTMLWindowClosedEvent;
-        protected virtual void OnExportHTMLWindowClosedEvent(ExportHTMLWindowEventArgs e)
+        public event EventHandler<ExportWindowEventArgs> RaiseExportWindowClosedEvent;
+        protected virtual void OnExportWindowClosedEvent(ExportWindowEventArgs e)
         {
-            EventHandler<ExportHTMLWindowEventArgs> handler = RaiseExportHTMLWindowClosedEvent;
+            EventHandler<ExportWindowEventArgs> handler = RaiseExportWindowClosedEvent;
             if (handler != null)
                 handler(this, e);
         }
@@ -193,23 +186,16 @@ namespace AProjects
         #region Секция методов
         private void CancelButtonCommand(object parameter)
         {
-            if (null != RaiseExportHTMLWindowClosedEvent)
+            if (null != RaiseExportWindowClosedEvent)
             {
                 Dictionary<String, Boolean> exportSettings = new Dictionary<string, Boolean>();
-                this.RaiseExportHTMLWindowClosedEvent(this, new ExportHTMLWindowEventArgs(exportSettings));
+                this.RaiseExportWindowClosedEvent(this, new ExportWindowEventArgs(exportSettings));
             }
         }
 
         private void ExportButtonCommand(object parameter)
         {
             Dictionary<String, Boolean> exportSettings = new Dictionary<string, Boolean>(); //Записали значения параметров экспорта в коллекцию
-            //FileDialog dialog = new SaveFileDialog();
-            //dialog.FileName = "AProjects"; //Имя файла по умолчанию
-            //dialog.DefaultExt = ".html"; //Расширение по умолчанию
-            //dialog.Filter = "Веб-страница (.html)|*.html|Все файлы|*.*";
-            //if (dialog.ShowDialog() == true)
-            //{
-                //String fileName = dialog.FileName; //Получили имя файла из диалога
                 exportSettings.Add("ExportSelectedRecords", ExportSelectedRecords);
                 exportSettings.Add("ExportActiveRecords", ExportActiveRecords);
                 exportSettings.Add("ExportCollapsedRecords", ExportCollapsedRecords);
@@ -218,8 +204,7 @@ namespace AProjects
                 exportSettings.Add("ExportColors", ExportColors);
                 exportSettings.Add("ExportNotes", ExportNotes);
                 exportSettings.Add("ExportAlarms", ExportAlarms);
-            //}
-            this.RaiseExportHTMLWindowClosedEvent(this, new ExportHTMLWindowEventArgs(exportSettings));
+            this.RaiseExportWindowClosedEvent(this, new ExportWindowEventArgs(exportSettings));
         }
         #endregion
     }

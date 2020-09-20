@@ -40,8 +40,9 @@ namespace AProjects
         private Dictionary<String, SignalWindow> signalWindows; //Список открытых окон редактирования сигналов (SignalWindow): <Номер строки, указатель на окно>
         private List<Alarm> alarms; //Список будильников
         private SignalProcessing signalProcessing; //Класс работы с таймерами для будильников
-        private ExportHTML exportHTML; //Окно настроек экспорта в HTML
-        private ExportHTMLViewModel exportHTMLViewModel; //viewModel для окна настроек экспорта в HTML
+        private Export exportVM; //Окно настроек экспорта в HTML
+        private ExportViewModel exportViewModel; //viewModel для окна настроек экспорта в HTML
+        private ExportMode exportMode; //Режим экспорта - HTML/CSV
 
         public ViewModel()
         {
@@ -144,68 +145,26 @@ namespace AProjects
             signalProcessing.UpdateTimers(alarms);
         }
 
-        private void ExportHTMLWindowClosedEventHandler(object sender, ExportHTMLWindowEventArgs eventArgs)
+        private void ExportWindowClosedEventHandler(object sender, ExportWindowEventArgs eventArgs)
         {
-            exportHTML.Close();
-            exportHTMLViewModel.RaiseExportHTMLWindowClosedEvent -= ExportHTMLWindowClosedEventHandler;
-            exportHTMLViewModel = null;
+            exportVM.Close();
+            exportViewModel.RaiseExportWindowClosedEvent -= ExportWindowClosedEventHandler;
+            exportViewModel = null;
             Dictionary<String, Boolean> exportSettings = (Dictionary < String, Boolean > )eventArgs.Message;
             if (exportSettings.Count == 0) //Если уставки отсутствуют, то пользователь нажал кнопку "Отмена"
                 return;
-            FileDialog dialog = new SaveFileDialog();
-            dialog.FileName = "AProjects"; //Имя файла по умолчанию
-            dialog.DefaultExt = ".html"; //Расширение по умолчанию
-            dialog.Filter = "Веб-страница |*.html|Все файлы|*.*";
-            if (dialog.ShowDialog() == true)
+            if (exportMode == ExportMode.Html)
             {
-                String fileName = dialog.FileName;
-                ExportHTMLProcessing exportHTMLProcessing = new ExportHTMLProcessing(exportSettings, model, fileName);
-
-                if (exportSettings["ExportSelectedRecords"] == true) //Экспорт выделенных записей
-                {
-                    //Выбираем выделенные записи
-                    if (SelectedViewRecords.Count > 0)
-                    {
-                        List<String> vrNumbers = new List<string>();
-                        foreach (ViewRecord vr in SelectedViewRecords)
-                        {
-                            vrNumbers.Add(vr.Number);
-                        }
-                        try //Перехват прерывание ошибки записи в файл
-                        {
-                            exportHTMLProcessing.SelectionExport(vrNumbers);
-                        }
-                        catch
-                        {
-                            MessageBox.Show("Ошибка записи файла HTML!");
-                        }
-                        finally
-                        {
-                            exportHTMLProcessing = null;
-                            exportSettings = null;
-                        }
-                    }
-                    else
-                        Debug.Assert(true, "ExportHTMLWindowClosedEventHandler - SelectedViewRecords.Count = 0");
-                }
-                else //Экспорт во всех случаях, кроме экспорта выделенных строк
-                {
-                    try //Перехват прерывание ошибки записи в файл
-                    {
-                        exportHTMLProcessing.Export();
-                    }
-                    catch
-                    {
-                        MessageBox.Show("Ошибка записи файла HTML!");
-                    }
-                    finally
-                    {
-                        exportHTMLProcessing = null;
-                        exportSettings = null;
-                    }
-                }
+                //Экспорт в HTML
+                Export2HTML(exportSettings);
             }
-
+            else if (exportMode == ExportMode.Csv)
+            {
+                //Экспорт в CSV
+                Export2CSV(exportSettings);
+            }
+            else
+                Debug.Assert(true, "ошибка режима экспорта");
         }
         #endregion
 
@@ -433,6 +392,129 @@ namespace AProjects
         {
             RecordCount = model.RecordsCount();
         }
+
+        /// <summary>
+        /// Экспорт данных в HTML-файл
+        /// </summary>
+        /// <param name="exportSettings">Словарь (Dictionary) параметров экспорта</param>
+        private void Export2HTML(Dictionary<String, Boolean> exportSettings)
+        {
+            FileDialog dialog = new SaveFileDialog();
+            dialog.FileName = "AProjects"; //Имя файла по умолчанию
+            dialog.DefaultExt = ".html"; //Расширение по умолчанию
+            dialog.Filter = "Веб-страница |*.html|Все файлы|*.*";
+            if (dialog.ShowDialog() == true)
+            {
+                String fileName = dialog.FileName;
+                ExportHTMLProcessing exportHTMLProcessing = new ExportHTMLProcessing(exportSettings, model, fileName);
+
+                if (exportSettings["ExportSelectedRecords"] == true) //Экспорт выделенных записей
+                {
+                    //Выбираем выделенные записи
+                    if (SelectedViewRecords.Count > 0)
+                    {
+                        List<String> vrNumbers = new List<string>();
+                        foreach (ViewRecord vr in SelectedViewRecords)
+                        {
+                            vrNumbers.Add(vr.Number);
+                        }
+                        try //Перехват прерывание ошибки записи в файл
+                        {
+                            exportHTMLProcessing.SelectionExport(vrNumbers);
+                        }
+                        catch
+                        {
+                            MessageBox.Show("Ошибка записи файла HTML!");
+                        }
+                        finally
+                        {
+                            exportHTMLProcessing = null;
+                            exportSettings = null;
+                        }
+                    }
+                    else
+                        Debug.Assert(true, "ExportWindowClosedEventHandler - SelectedViewRecords.Count = 0");
+                }
+                else //Экспорт во всех случаях, кроме экспорта выделенных строк
+                {
+                    try //Перехват прерывание ошибки записи в файл
+                    {
+                        exportHTMLProcessing.Export();
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Ошибка записи файла HTML!");
+                    }
+                    finally
+                    {
+                        exportHTMLProcessing = null;
+                        exportSettings = null;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Экспорт данных в CSV-файл
+        /// </summary>
+        /// <param name="exportSettings">Словарь (Dictionary) параметров экспорта</param>
+        private void Export2CSV(Dictionary<String, Boolean> exportSettings)
+        {
+            FileDialog dialog = new SaveFileDialog();
+            dialog.FileName = "AProjects"; //Имя файла по умолчанию
+            dialog.DefaultExt = ".csv"; //Расширение по умолчанию
+            dialog.Filter = "Файл CSV (разделитель точка с запятой) |*.csv|Все файлы|*.*";
+            if (dialog.ShowDialog() == true)
+            {
+                String fileName = dialog.FileName;
+                ExportCSVProcessing exportCSVProcessing = new ExportCSVProcessing(exportSettings, model, fileName);
+
+                if (exportSettings["ExportSelectedRecords"] == true) //Экспорт выделенных записей
+                {
+                    //Выбираем выделенные записи
+                    if (SelectedViewRecords.Count > 0)
+                    {
+                        List<String> vrNumbers = new List<string>();
+                        foreach (ViewRecord vr in SelectedViewRecords)
+                        {
+                            vrNumbers.Add(vr.Number);
+                        }
+                        try //Перехват прерывание ошибки записи в файл
+                        {
+                            exportCSVProcessing.SelectionExport(vrNumbers);
+                        }
+                        catch
+                        {
+                            MessageBox.Show("Ошибка записи файла CSV!");
+                        }
+                        finally
+                        {
+                            exportCSVProcessing = null;
+                            exportSettings = null;
+                        }
+                    }
+                    else
+                        Debug.Assert(true, "ExportWindowClosedEventHandler - SelectedViewRecords.Count = 0");
+                }
+                else //Экспорт во всех случаях, кроме экспорта выделенных строк
+                {
+                    try //Перехват прерывание ошибки записи в файл
+                    {
+                        exportCSVProcessing.Export();
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Ошибка записи файла HTML!");
+                    }
+                    finally
+                    {
+                        exportCSVProcessing = null;
+                        exportSettings = null;
+                    }
+                }
+            }
+
+        }
         #endregion
 
         /// <summary>
@@ -494,8 +576,93 @@ namespace AProjects
             viewRecords.Reverse();
         }
 
+        /// <summary>
+        /// Запрашивает данные из модели и формирует viewRecords с учетом признака стиля для отображения в View
+        /// Вызывается по команде отображения строк с цветовой маркировкой
+        /// </summary>
+        private void ViewUpdateByColor(String colorParametr)
+        {
+            if (colorParametr == "White") //Если выбрана отмена цветового выделения или двойной клик на Белом - переходим к предыдущему режиму отбражения
+            {
+                ViewUpdate();
+            }
+            else //Если выбран режим отображения с цветным выделением
+            {
+                Int32 fillParameter = 0;
+                switch (colorParametr)
+                {
+                    case "Red":
+                        fillParameter = 1;
+                        break;
+                    case "Yellow":
+                        fillParameter = 2;
+                        break;
+                    case "Green":
+                        fillParameter = 3;
+                        break;
+                    case "Blue":
+                        fillParameter = 4;
+                        break;
+                    case "Magenta":
+                        fillParameter = 5;
+                        break;
+                    default:
+                        Debug.Assert(true, "ViewUpdateByColor - неизвестный параметр цветового выделения");
+                        break;
+                }
+                model.GetModelData(ref viewModelRecords);
+                viewRecords.Clear();
+                List<ViewRecord> preViewRecords = new List<ViewRecord>();
+
+                if (archiveView) //Архивные записи, завершенные и незавершенные !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                {
+                    foreach (Record element in viewModelRecords)
+                    {
+                        if (element.RecordStatus == RecordStatus.arx) //Неправильно, показать 
+                        {
+                            if (element.RecordType == RecordType.project || element.RecordType ==RecordType.job || element.Fill == fillParameter)
+                            {
+                                ViewRecordAdding(preViewRecords, element);
+                            }
+                        }
+                    }
+                }
+                else if (!archiveView && !viewWithFinished) //Активные записи, завершенные не показывать
+                {
+                    foreach (Record element in viewModelRecords)
+                    {
+                        if (element.RecordStatus == RecordStatus.active)
+                        {
+                            if (element.RecordType == RecordType.project || element.RecordType == RecordType.job || element.Fill == fillParameter)
+                            {
+                                ViewRecordAdding(preViewRecords, element);
+                            }
+                        }
+                    }
+                }
+                else //Активные записи, завершенные показывать
+                {
+                    foreach (Record element in viewModelRecords)
+                    {
+                        if (element.RecordStatus == RecordStatus.active || element.RecordStatus == RecordStatus.finished)
+                        {
+                            if (element.RecordType == RecordType.project || element.RecordType == RecordType.job || element.Fill == fillParameter)
+                            {
+                                ViewRecordAdding(preViewRecords, element);
+                            }
+                        }
+                    }
+                }
+                preViewRecords.Reverse();
+                foreach (ViewRecord element in preViewRecords)
+                {
+                    viewRecords.Insert(0, element);
+                }
+            }
+        }
+
         #region Визуальное оформление View
-        //Вычисление номера стиля для записи
+        //Вычисление номера стиля для строки
         private Int32 StyleCalculate(Record record)
         {
             /* Номера стилей ========================
@@ -519,10 +686,6 @@ namespace AProjects
              * 41 - Проект, завершенный
              */
 
-            //    _recordType = RecordType.project;
-            //    _recordStatus = RecordStatus.active;
-            //    _fill = 0;
-            //    _hide = false;
             Int32 res = 0;
 
             switch (record.RecordType)
@@ -535,22 +698,22 @@ namespace AProjects
                         switch (record.Fill)
                         {
                             case 0:
-                                res = 0;
+                                res = 0; //Белый
                                 break;
                             case 1:
-                                res = 1;
+                                res = 1; //Красный
                                 break;
                             case 2:
-                                res = 2;
+                                res = 2; //Желтый
                                 break;
                             case 3:
-                                res = 3;
+                                res = 3; //Зеленый
                                 break;
                             case 4:
-                                res = 4;
+                                res = 4; //Синий
                                 break;
                             case 5:
-                                res = 5;
+                                res = 5; //Фиолетовый
                                 break;
                             default:
                                 throw new ArgumentException("Индекс поля Fill вне диапазона.");
@@ -728,6 +891,11 @@ namespace AProjects
         private ICommand _exportHTML;
         public ICommand ExportHTML => _exportHTML ?? (_exportHTML = new RelayCommand(ExportHTMLCommand, IsCanExport));
 
+        //Файл.Экспорт CSV
+        private ICommand _exportCSV;
+        public ICommand ExportCSV => _exportCSV ?? (_exportCSV = new RelayCommand(ExportCSVCommand, IsCanExport));
+
+
         //Файл.Выход
         private ICommand _exit;
         public ICommand AppExit => _exit ?? (_exit = new RelayCommand(ExitCommand));
@@ -798,6 +966,9 @@ namespace AProjects
         private ICommand _hideJobs;
         public ICommand HideJobs => _hideJobs ?? (_hideJobs = new RelayCommand(HideJobsCommand));
 
+        //Вид.Показать цветовое выделение
+        private ICommand _showColorSelection;
+        public ICommand ShowColorSelection => _showColorSelection ?? (_showColorSelection = new RelayCommand(ShowColorSelectionCommand));
         #endregion
 
         #region Записи
@@ -981,21 +1152,33 @@ namespace AProjects
         //Файл.Экспорт HTML
         private void ExportHTMLCommand(object parameter)
         {
-            exportHTMLViewModel = new ExportHTMLViewModel();
-            exportHTMLViewModel.RaiseExportHTMLWindowClosedEvent += ExportHTMLWindowClosedEventHandler;
-            exportHTML = new ExportHTML();
-            exportHTML.DataContext = exportHTMLViewModel;
-            exportHTML.Show();
+            exportViewModel = new ExportViewModel();
+            exportViewModel.RaiseExportWindowClosedEvent += ExportWindowClosedEventHandler;
+            exportVM = new Export();
+            exportVM.DataContext = exportViewModel;
+            exportMode = ExportMode.Html;
+            exportVM.Show();
         }
 
         private Boolean IsCanExport(object parameter)
         {
             Boolean res;
-            if (null == exportHTMLViewModel)
+            if (null == exportViewModel)
                 res = true;
             else
                 res = false;
             return res;
+        }
+
+        //Файл.Экспорт CSV
+        private void ExportCSVCommand(object parameter)
+        {
+            exportViewModel = new ExportViewModel();
+            exportViewModel.RaiseExportWindowClosedEvent += ExportWindowClosedEventHandler;
+            exportVM = new Export();
+            exportVM.DataContext = exportViewModel;
+            exportMode = ExportMode.Csv;
+            exportVM.Show();
         }
 
         //Файл.Выход
@@ -1207,6 +1390,12 @@ namespace AProjects
         {
             model.Hide2Jobs();
             ViewUpdate();
+        }
+
+        //Вид.Показать цветовое выделение
+        private void ShowColorSelectionCommand(object parameter)
+        {
+            ViewUpdateByColor(parameter as String);
         }
         #endregion
 

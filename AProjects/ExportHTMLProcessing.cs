@@ -76,6 +76,9 @@ namespace AProjects
             FormatRecords();
         }
 
+        /// <summary>
+        /// Формирование списка (List) строк и запись их в файл
+        /// </summary>
         private void FormatRecords()
         {
             List<String> output = new List<string>();

@@ -8,5 +8,4 @@
     <SolidColorBrush x:Key="ButtoFinishedBackground" Color="#FFE0E0E0" />
     <SolidColorBrush x:Key="ButtonArhBackground" Color="MidnightBlue" />
     <SolidColorBrush x:Key="DataGridBackground" Color="#FFF9F9F9" />
-
 </ResourceDictionary>

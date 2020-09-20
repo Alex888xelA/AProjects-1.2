@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace AProjects
 {
-    class ExportHTMLWindowEventArgs : EventArgs
+    class ExportWindowEventArgs : EventArgs
     {
         private Dictionary<String, Boolean> settings;
 
-        public ExportHTMLWindowEventArgs(Dictionary<String, Boolean> s)
+        public ExportWindowEventArgs(Dictionary<String, Boolean> s)
         {
             settings = s;
         }

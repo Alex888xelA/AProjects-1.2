@@ -26,8 +26,8 @@
     <MapFileExtensions>true</MapFileExtensions>
     <TargetCulture>ru</TargetCulture>
     <ProductName>AProject</ProductName>
-    <ApplicationRevision>1</ApplicationRevision>
-    <ApplicationVersion>1.2.0.1</ApplicationVersion>
+    <ApplicationRevision>2</ApplicationRevision>
+    <ApplicationVersion>1.2.0.2</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -95,13 +95,14 @@
     <Compile Include="AdditionalWin\NoteWindow.xaml.cs">
       <DependentUpon>NoteWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="EventArgs\ExportHTMLWindowEventArgs.cs" />
+    <Compile Include="EventArgs\ExportWindowEventArgs.cs" />
     <Compile Include="EventArgs\NoteWindowClosedEventArgs.cs" />
-    <Compile Include="ExportHTML.xaml.cs">
-      <DependentUpon>ExportHTML.xaml</DependentUpon>
+    <Compile Include="Export.xaml.cs">
+      <DependentUpon>Export.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ExportCSVProcessing.cs" />
     <Compile Include="ExportHTMLProcessing.cs" />
-    <Compile Include="Models\ExportHTMLViewModel.cs" />
+    <Compile Include="Models\ExportViewModel.cs" />
     <Compile Include="SignalProcessing.cs" />
     <Compile Include="AdditionalWin\SignalWindow.xaml.cs">
       <DependentUpon>SignalWindow.xaml</DependentUpon>
@@ -121,7 +122,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ExportHTML.xaml">
+    <Page Include="Export.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -15,11 +15,11 @@ using System.Windows.Shapes;
 namespace AProjects
 {
     /// <summary>
-    /// Логика взаимодействия для ExportHTML.xaml
+    /// Логика взаимодействия для Export.xaml
     /// </summary>
-    public partial class ExportHTML : Window
+    public partial class Export : Window
     {
-        public ExportHTML()
+        public Export()
         {
             InitializeComponent();
         }
