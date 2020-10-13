@@ -50,6 +50,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>3E0E19C32BE163F4E092298016E173A948B1922F</ManifestCertificateThumbprint>
@@ -58,13 +59,19 @@
     <ManifestKeyFile>AProjects_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <GenerateManifests>true</GenerateManifests>
+    <GenerateManifests>false</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>AProject_4.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -91,17 +98,21 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AdditionalWin\AboutWindow.xaml.cs">
+      <DependentUpon>AboutWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="EventArgs\AlarmTimerTickEventArgs.cs" />
     <Compile Include="AdditionalWin\NoteWindow.xaml.cs">
       <DependentUpon>NoteWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="EventArgs\ExportWindowEventArgs.cs" />
     <Compile Include="EventArgs\NoteWindowClosedEventArgs.cs" />
-    <Compile Include="Export.xaml.cs">
+    <Compile Include="AdditionalWin\Export.xaml.cs">
       <DependentUpon>Export.xaml</DependentUpon>
     </Compile>
     <Compile Include="ExportCSVProcessing.cs" />
     <Compile Include="ExportHTMLProcessing.cs" />
+    <Compile Include="Models\AboutViewModel.cs" />
     <Compile Include="Models\ExportViewModel.cs" />
     <Compile Include="SignalProcessing.cs" />
     <Compile Include="AdditionalWin\SignalWindow.xaml.cs">
@@ -114,6 +125,10 @@
     <Compile Include="Models\NoteViewModel.cs" />
     <Compile Include="DataTypes\RelayCommand.cs" />
     <Compile Include="Models\ViewModel.cs" />
+    <Page Include="AdditionalWin\AboutWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Dictionary1.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -122,7 +137,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Export.xaml">
+    <Page Include="AdditionalWin\Export.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -169,6 +184,7 @@
     </EmbeddedResource>
     <None Include="AProjects_TemporaryKey.pfx" />
     <None Include="packages.config" />
+    <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -189,11 +205,12 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="AProject_4.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Logo_2.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

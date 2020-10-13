@@ -310,9 +310,8 @@
                 <Separator />
                 <MenuItem Header="Переместить запись вверх" Command="{Binding MoveRecordUp, Mode=OneWay}" />
                 <MenuItem Header="Переместить запись вниз" Command="{Binding MoveRecordDown, Mode=OneWay}" />
-
             </MenuItem>
-            <MenuItem Header="Помощь"></MenuItem>
+            <MenuItem Header="О программе" Command="{Binding About, Mode=OneWay}"></MenuItem>
         </Menu>
 
         <DatePicker Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="0" Style="{StaticResource DataPickerTop}" />

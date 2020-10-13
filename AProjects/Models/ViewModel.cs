@@ -40,9 +40,11 @@ namespace AProjects
         private Dictionary<String, SignalWindow> signalWindows; //Список открытых окон редактирования сигналов (SignalWindow): <Номер строки, указатель на окно>
         private List<Alarm> alarms; //Список будильников
         private SignalProcessing signalProcessing; //Класс работы с таймерами для будильников
-        private Export exportVM; //Окно настроек экспорта в HTML
+        private Export exportWindow; //Окно настроек экспорта в HTML
         private ExportViewModel exportViewModel; //viewModel для окна настроек экспорта в HTML
         private ExportMode exportMode; //Режим экспорта - HTML/CSV
+        private AboutWindow aboutWindow; //Окно "О программе"
+        private AboutViewModel aboutVM; //ViewModel для окна "О программе"
 
         public ViewModel()
         {
@@ -147,7 +149,7 @@ namespace AProjects
 
         private void ExportWindowClosedEventHandler(object sender, ExportWindowEventArgs eventArgs)
         {
-            exportVM.Close();
+            exportWindow.Close();
             exportViewModel.RaiseExportWindowClosedEvent -= ExportWindowClosedEventHandler;
             exportViewModel = null;
             Dictionary<String, Boolean> exportSettings = (Dictionary < String, Boolean > )eventArgs.Message;
@@ -165,6 +167,14 @@ namespace AProjects
             }
             else
                 Debug.Assert(true, "ошибка режима экспорта");
+        }
+
+        //Закрытие окна "О программе"
+        private void AboutWindowClosedEventHandler(object sender, EventArgs eventArgs)
+        {
+            aboutWindow.Close();
+            aboutVM.RaiseAboutWindowClosedEvent -= AboutWindowClosedEventHandler;
+            aboutVM = null;
         }
         #endregion
 
@@ -1046,6 +1056,14 @@ namespace AProjects
         private ICommand _moveRecordDown;
         public ICommand MoveRecordDown => _moveRecordDown ?? (_moveRecordDown = new RelayCommand(MoveRecordDownCommand));
         #endregion
+
+        #region О программе
+        //Переместить запись вниз
+        private ICommand _about;
+        public ICommand About => _about ?? (_about = new RelayCommand(AboutCommand));
+
+        #endregion
+
         #endregion
 
         #region Секция методов
@@ -1154,10 +1172,10 @@ namespace AProjects
         {
             exportViewModel = new ExportViewModel();
             exportViewModel.RaiseExportWindowClosedEvent += ExportWindowClosedEventHandler;
-            exportVM = new Export();
-            exportVM.DataContext = exportViewModel;
+            exportWindow = new Export();
+            exportWindow.DataContext = exportViewModel;
             exportMode = ExportMode.Html;
-            exportVM.Show();
+            exportWindow.Show();
         }
 
         private Boolean IsCanExport(object parameter)
@@ -1175,10 +1193,10 @@ namespace AProjects
         {
             exportViewModel = new ExportViewModel();
             exportViewModel.RaiseExportWindowClosedEvent += ExportWindowClosedEventHandler;
-            exportVM = new Export();
-            exportVM.DataContext = exportViewModel;
+            exportWindow = new Export();
+            exportWindow.DataContext = exportViewModel;
             exportMode = ExportMode.Csv;
-            exportVM.Show();
+            exportWindow.Show();
         }
 
         //Файл.Выход
@@ -1732,6 +1750,19 @@ namespace AProjects
                 Int32 rowIndex = GetIndexByNumber(number) + 1;
                 SelectCellByIndex(mainDataGrid, rowIndex, 3);
             }
+        }
+        #endregion
+
+        #region Секция методов меню "О программе"
+        //Открыть окно "О программе"
+        private void AboutCommand(object parameter)
+        {
+            //----------------------------------------------------------
+            aboutVM = new AboutViewModel();
+            aboutVM.RaiseAboutWindowClosedEvent += AboutWindowClosedEventHandler;
+            aboutWindow = new AboutWindow();
+            aboutWindow.DataContext = aboutVM;
+            aboutWindow.Show();
         }
         #endregion
         #endregion
